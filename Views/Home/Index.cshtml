@@ -6,7 +6,7 @@
     ViewData["Title"] = "Inicio";
 }
 
-<section class="hero is-primary is-medium">
+<section class="hero is-info is-medium">
     <div class="hero-body">
         <div class="container has-text-centered">
             <h1 class="title is-1">
@@ -23,7 +23,7 @@
     <div class="container">
         @if (SignInManager.IsSignedIn(User))
         {
-            <div class="notification is-success is-light">
+            <div class="notification is-info is-light">
                 <p class="title is-4">Bienvenido, @User.Identity?.Name!</p>
             </div>
 
@@ -37,7 +37,7 @@
                             </span>
                             <h3 class="title is-4 mt-3">Mis Denuncias</h3>
                             <p class="mb-4">Gestiona tus denuncias registradas</p>
-                            <a asp-controller="Complaints" asp-action="Index" class="button is-primary">
+                            <a asp-controller="Complaints" asp-action="Index" class="button is-info">
                                 Ver Mis Denuncias
                             </a>
                         </div>
@@ -49,7 +49,7 @@
                             </span>
                             <h3 class="title is-4 mt-3">Nueva Denuncia</h3>
                             <p class="mb-4">Registra una nueva denuncia</p>
-                            <a asp-controller="Complaints" asp-action="Create" class="button is-success">
+                            <a asp-controller="Complaints" asp-action="Create" class="button is-info">
                                 Crear Denuncia
                             </a>
                         </div>
@@ -82,7 +82,7 @@
                             Inicia sesion o registrate para gestionar tus denuncias
                         </p>
                         <div class="buttons is-centered">
-                            <a asp-area="Identity" asp-page="/Account/Login" class="button is-primary is-medium">
+                            <a asp-area="Identity" asp-page="/Account/Login" class="button is-info is-medium">
                                 Iniciar Sesion
                             </a>
                             <a asp-area="Identity" asp-page="/Account/Register" class="button is-outlined is-medium">

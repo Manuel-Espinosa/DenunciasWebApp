@@ -7,7 +7,7 @@
 <h1 class="title">Mis Denuncias</h1>
 
 <div class="mb-4">
-    <a asp-action="Create" class="button is-primary">Nueva Denuncia</a>
+    <a asp-action="Create" class="button is-info">Nueva Denuncia</a>
 </div>
 
 @if (!Model.Any())
@@ -52,9 +52,9 @@ else
                     </td>
                     <td>
                         <div class="buttons are-small">
-                            <a asp-action="Details" asp-route-id="@item.Id" class="button is-info is-outlined">Ver</a>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="button is-warning is-outlined">Editar</a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="button is-danger is-outlined">Eliminar</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="button is-info">Ver</a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="button is-warning">Editar</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="button is-danger">Eliminar</a>
                         </div>
                     </td>
                 </tr>
