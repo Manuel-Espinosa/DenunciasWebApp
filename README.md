@@ -20,6 +20,7 @@ Esta aplicacion permite a los usuarios registrar denuncias que son gestionadas p
 - Entity Framework Core Tools (para migraciones)
 
 Para instalar EF Core Tools:
+
 ```bash
 dotnet tool install --global dotnet-ef
 ```
@@ -27,27 +28,33 @@ dotnet tool install --global dotnet-ef
 ## Instalacion
 
 1. Clonar el repositorio:
+
 ```bash
 git clone <url-del-repositorio>
 cd DenunciasWebApp
 ```
 
 2. Restaurar dependencias:
+
 ```bash
 dotnet restore
+dotnet tool restore
 ```
 
 3. Aplicar migraciones para crear la base de datos:
+
 ```bash
 dotnet ef database update
 ```
 
 4. Ejecutar la aplicacion:
+
 ```bash
 dotnet run
 ```
 
 Para desarrollo con hot reload:
+
 ```bash
 dotnet watch run
 ```
