@@ -42,7 +42,17 @@ using (var scope = app.Services.CreateScope())
     // Create admin user
     if (await userManager.FindByEmailAsync("admin@admin.com") == null)
     {
-        var admin = new ApplicationUser { UserName = "admin@admin.com", Email = "admin@admin.com", EmailConfirmed = true };
+        var admin = new ApplicationUser
+        {
+            UserName = "admin@admin.com",
+            Email = "admin@admin.com",
+            EmailConfirmed = true,
+            Name = "Admin",
+            LastName = "Sistema",
+            CURP = "XEXX010101HNEXXXA4",
+            Sex = Sex.Masculino,
+            BirthDate = new DateTime(1990, 1, 1)
+        };
         await userManager.CreateAsync(admin, "Admin123!");
         await userManager.AddToRoleAsync(admin, "Administrador");
     }
