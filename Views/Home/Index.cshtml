@@ -1,0 +1,97 @@
+@using Microsoft.AspNetCore.Identity
+@using DenunciasWebApp.Models
+@inject SignInManager<ApplicationUser> SignInManager
+
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<section class="hero is-primary is-medium">
+    <div class="hero-body">
+        <div class="container has-text-centered">
+            <h1 class="title is-1">
+                Sistema de Denuncias
+            </h1>
+            <h2 class="subtitle">
+                Plataforma ciudadana para registro y seguimiento de denuncias
+            </h2>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <div class="notification is-success is-light">
+                <p class="title is-4">Bienvenido, @User.Identity?.Name!</p>
+            </div>
+
+            <div class="columns is-centered mt-5">
+                @if (User.IsInRole("Usuario"))
+                {
+                    <div class="column is-4">
+                        <div class="box has-text-centered">
+                            <span class="icon is-large has-text-primary">
+                                <i class="fas fa-file-alt fa-3x"></i>
+                            </span>
+                            <h3 class="title is-4 mt-3">Mis Denuncias</h3>
+                            <p class="mb-4">Gestiona tus denuncias registradas</p>
+                            <a asp-controller="Complaints" asp-action="Index" class="button is-primary">
+                                Ver Mis Denuncias
+                            </a>
+                        </div>
+                    </div>
+                    <div class="column is-4">
+                        <div class="box has-text-centered">
+                            <span class="icon is-large has-text-success">
+                                <i class="fas fa-plus-circle fa-3x"></i>
+                            </span>
+                            <h3 class="title is-4 mt-3">Nueva Denuncia</h3>
+                            <p class="mb-4">Registra una nueva denuncia</p>
+                            <a asp-controller="Complaints" asp-action="Create" class="button is-success">
+                                Crear Denuncia
+                            </a>
+                        </div>
+                    </div>
+                }
+                @if (User.IsInRole("Administrador"))
+                {
+                    <div class="column is-4">
+                        <div class="box has-text-centered">
+                            <span class="icon is-large has-text-warning">
+                                <i class="fas fa-users-cog fa-3x"></i>
+                            </span>
+                            <h3 class="title is-4 mt-3">Atencion Ciudadana</h3>
+                            <p class="mb-4">Administra todas las denuncias</p>
+                            <a asp-controller="Admin" asp-action="Index" class="button is-warning">
+                                Panel de Administracion
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="columns is-centered">
+                <div class="column is-8">
+                    <div class="box">
+                        <h3 class="title is-4 has-text-centered">Accede al Sistema</h3>
+                        <p class="has-text-centered mb-4">
+                            Inicia sesion o registrate para gestionar tus denuncias
+                        </p>
+                        <div class="buttons is-centered">
+                            <a asp-area="Identity" asp-page="/Account/Login" class="button is-primary is-medium">
+                                Iniciar Sesion
+                            </a>
+                            <a asp-area="Identity" asp-page="/Account/Register" class="button is-outlined is-medium">
+                                Registrarse
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>

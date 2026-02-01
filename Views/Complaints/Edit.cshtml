@@ -1,0 +1,43 @@
+@model DenunciasWebApp.Models.Complaint
+
+@{
+    ViewData["Title"] = "Editar Denuncia";
+}
+
+<h1 class="title">Editar Denuncia</h1>
+
+<div class="box">
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="notification is-danger"></div>
+        <input type="hidden" asp-for="Id" />
+
+        <div class="field">
+            <label asp-for="Title" class="label">Titulo</label>
+            <div class="control">
+                <input asp-for="Title" class="input" />
+            </div>
+            <span asp-validation-for="Title" class="help is-danger"></span>
+        </div>
+
+        <div class="field">
+            <label asp-for="Description" class="label">Descripcion</label>
+            <div class="control">
+                <textarea asp-for="Description" class="textarea" rows="6"></textarea>
+            </div>
+            <span asp-validation-for="Description" class="help is-danger"></span>
+        </div>
+
+        <div class="field is-grouped">
+            <div class="control">
+                <button type="submit" class="button is-primary">Guardar Cambios</button>
+            </div>
+            <div class="control">
+                <a asp-action="Index" class="button is-light">Cancelar</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

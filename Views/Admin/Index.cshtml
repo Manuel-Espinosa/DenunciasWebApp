@@ -1,0 +1,62 @@
+@model IEnumerable<DenunciasWebApp.Models.Complaint>
+
+@{
+    ViewData["Title"] = "Atencion Ciudadana";
+}
+
+<h1 class="title">Atencion Ciudadana</h1>
+<h2 class="subtitle">Todas las denuncias</h2>
+
+@if (!Model.Any())
+{
+    <div class="notification is-info">
+        No hay denuncias registradas en el sistema.
+    </div>
+}
+else
+{
+    <div class="table-container">
+        <table class="table is-fullwidth is-striped is-hoverable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Titulo</th>
+                    <th>Usuario</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Title</td>
+                    <td>@(item.User?.Email ?? "N/A")</td>
+                    <td>@item.CreatetAt.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>
+                        @switch (item.Status)
+                        {
+                            case DenunciasWebApp.Models.ComplaintStatus.Active:
+                                <span class="tag is-success">Activa</span>
+                                break;
+                            case DenunciasWebApp.Models.ComplaintStatus.Processing:
+                                <span class="tag is-warning">En Proceso</span>
+                                break;
+                            case DenunciasWebApp.Models.ComplaintStatus.Done:
+                                <span class="tag is-info">Finalizada</span>
+                                break;
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="ChangeStatus" asp-route-id="@item.Id" class="button is-small is-primary">
+                            Cambiar Estado
+                        </a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

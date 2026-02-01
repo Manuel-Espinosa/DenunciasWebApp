@@ -1,0 +1,119 @@
+@using Microsoft.AspNetCore.Identity
+@using DenunciasWebApp.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DenunciasWebApp</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" asp-area="" asp-controller="Home" asp-action="Index">
+                <strong>DenunciasWebApp</strong>
+            </a>
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="mainNavbar">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="mainNavbar" class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item" asp-area="" asp-controller="Home" asp-action="Index">
+                    Inicio
+                </a>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    @if (User.IsInRole("Usuario"))
+                    {
+                        <a class="navbar-item" asp-area="" asp-controller="Complaints" asp-action="Index">
+                            Mis Denuncias
+                        </a>
+                    }
+                    @if (User.IsInRole("Administrador"))
+                    {
+                        <a class="navbar-item" asp-area="" asp-controller="Admin" asp-action="Index">
+                            Atención Ciudadana
+                        </a>
+                    }
+                }
+            </div>
+
+            <div class="navbar-end">
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <div class="navbar-item has-dropdown is-hoverable">
+                        <a class="navbar-link">
+                            @User.Identity?.Name
+                        </a>
+                        <div class="navbar-dropdown is-right">
+                            <a class="navbar-item" asp-area="Identity" asp-page="/Account/Manage/Index">
+                                Mi Cuenta
+                            </a>
+                            <hr class="navbar-divider" />
+                            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home")" method="post">
+                                <button type="submit" class="navbar-item" style="border: none; background: none; cursor: pointer; width: 100%; text-align: left;">
+                                    Cerrar Sesión
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            <a class="button is-light" asp-area="Identity" asp-page="/Account/Register">
+                                Registrarse
+                            </a>
+                            <a class="button is-white" asp-area="Identity" asp-page="/Account/Login">
+                                Iniciar Sesión
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </nav>
+
+    <section class="section">
+        <div class="container">
+            <main role="main">
+                @RenderBody()
+            </main>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                &copy; 2026 - DenunciasWebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacidad</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+            $navbarBurgers.forEach(el => {
+                el.addEventListener('click', () => {
+                    const target = el.dataset.target;
+                    const $target = document.getElementById(target);
+                    el.classList.toggle('is-active');
+                    $target.classList.toggle('is-active');
+                });
+            });
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

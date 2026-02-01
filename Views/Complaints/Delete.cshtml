@@ -1,0 +1,48 @@
+@model DenunciasWebApp.Models.Complaint
+
+@{
+    ViewData["Title"] = "Eliminar Denuncia";
+}
+
+<h1 class="title">Eliminar Denuncia</h1>
+
+<div class="notification is-warning">
+    <strong>Atencion:</strong> Esta accion no se puede deshacer.
+</div>
+
+<div class="box">
+    <h4 class="subtitle">Detalles de la denuncia</h4>
+
+    <div class="content">
+        <p><strong>Titulo:</strong> @Model.Title</p>
+        <p><strong>Descripcion:</strong> @Model.Description</p>
+        <p><strong>Fecha:</strong> @Model.CreatetAt.ToString("dd/MM/yyyy HH:mm")</p>
+        <p>
+            <strong>Estado:</strong>
+            @switch (Model.Status)
+            {
+                case DenunciasWebApp.Models.ComplaintStatus.Active:
+                    <span class="tag is-success">Activa</span>
+                    break;
+                case DenunciasWebApp.Models.ComplaintStatus.Processing:
+                    <span class="tag is-warning">En Proceso</span>
+                    break;
+                case DenunciasWebApp.Models.ComplaintStatus.Done:
+                    <span class="tag is-info">Finalizada</span>
+                    break;
+            }
+        </p>
+    </div>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <div class="field is-grouped">
+            <div class="control">
+                <button type="submit" class="button is-danger">Eliminar Denuncia</button>
+            </div>
+            <div class="control">
+                <a asp-action="Index" class="button is-light">Cancelar</a>
+            </div>
+        </div>
+    </form>
+</div>

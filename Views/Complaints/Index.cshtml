@@ -1,0 +1,65 @@
+@model IEnumerable<DenunciasWebApp.Models.Complaint>
+
+@{
+    ViewData["Title"] = "Mis Denuncias";
+}
+
+<h1 class="title">Mis Denuncias</h1>
+
+<div class="mb-4">
+    <a asp-action="Create" class="button is-primary">Nueva Denuncia</a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="notification is-info">
+        No tienes denuncias registradas. <a asp-action="Create">Crea tu primera denuncia</a>.
+    </div>
+}
+else
+{
+    <div class="table-container">
+        <table class="table is-fullwidth is-striped is-hoverable">
+            <thead>
+                <tr>
+                    <th>Titulo</th>
+                    <th>Descripcion</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                    <td>@(item.Description.Length > 50 ? item.Description.Substring(0, 50) + "..." : item.Description)</td>
+                    <td>@item.CreatetAt.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>
+                        @switch (item.Status)
+                        {
+                            case DenunciasWebApp.Models.ComplaintStatus.Active:
+                                <span class="tag is-success">Activa</span>
+                                break;
+                            case DenunciasWebApp.Models.ComplaintStatus.Processing:
+                                <span class="tag is-warning">En Proceso</span>
+                                break;
+                            case DenunciasWebApp.Models.ComplaintStatus.Done:
+                                <span class="tag is-info">Finalizada</span>
+                                break;
+                        }
+                    </td>
+                    <td>
+                        <div class="buttons are-small">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="button is-info is-outlined">Ver</a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="button is-warning is-outlined">Editar</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="button is-danger is-outlined">Eliminar</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

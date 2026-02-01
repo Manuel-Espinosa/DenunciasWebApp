@@ -1,0 +1,39 @@
+@model DenunciasWebApp.Models.Complaint
+
+@{
+    ViewData["Title"] = "Detalle de Denuncia";
+}
+
+<h1 class="title">Detalle de Denuncia</h1>
+
+<div class="box">
+    <div class="content">
+        <p><strong>Titulo:</strong> @Model.Title</p>
+        <p><strong>Descripcion:</strong> @Model.Description</p>
+        <p><strong>Fecha:</strong> @Model.CreatetAt.ToString("dd/MM/yyyy HH:mm")</p>
+        <p>
+            <strong>Estado:</strong>
+            @switch (Model.Status)
+            {
+                case DenunciasWebApp.Models.ComplaintStatus.Active:
+                    <span class="tag is-success">Activa</span>
+                    break;
+                case DenunciasWebApp.Models.ComplaintStatus.Processing:
+                    <span class="tag is-warning">En Proceso</span>
+                    break;
+                case DenunciasWebApp.Models.ComplaintStatus.Done:
+                    <span class="tag is-info">Finalizada</span>
+                    break;
+            }
+        </p>
+    </div>
+
+    <div class="field is-grouped">
+        <div class="control">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="button is-warning">Editar</a>
+        </div>
+        <div class="control">
+            <a asp-action="Index" class="button is-light">Volver</a>
+        </div>
+    </div>
+</div>

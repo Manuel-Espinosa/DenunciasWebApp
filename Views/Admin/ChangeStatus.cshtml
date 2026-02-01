@@ -1,0 +1,71 @@
+@model DenunciasWebApp.Models.Complaint
+
+@{
+    ViewData["Title"] = "Cambiar Estado";
+}
+
+<h1 class="title">Cambiar Estado de Denuncia</h1>
+
+<div class="box">
+    <h4 class="subtitle">Detalles de la denuncia</h4>
+
+    <div class="content">
+        <p><strong>ID:</strong> @Model.Id</p>
+        <p><strong>Titulo:</strong> @Model.Title</p>
+        <p><strong>Descripcion:</strong> @Model.Description</p>
+        <p><strong>Usuario:</strong> @(Model.User?.Email ?? "N/A")</p>
+        <p><strong>Fecha:</strong> @Model.CreatetAt.ToString("dd/MM/yyyy HH:mm")</p>
+        <p>
+            <strong>Estado actual:</strong>
+            @switch (Model.Status)
+            {
+                case DenunciasWebApp.Models.ComplaintStatus.Active:
+                    <span class="tag is-success">Activa</span>
+                    break;
+                case DenunciasWebApp.Models.ComplaintStatus.Processing:
+                    <span class="tag is-warning">En Proceso</span>
+                    break;
+                case DenunciasWebApp.Models.ComplaintStatus.Done:
+                    <span class="tag is-info">Finalizada</span>
+                    break;
+            }
+        </p>
+    </div>
+
+    <hr />
+
+    <form asp-action="ChangeStatus" method="post">
+        <input type="hidden" name="id" value="@Model.Id" />
+
+        <div class="field">
+            <label class="label">Nuevo Estado</label>
+            <div class="control">
+                <div class="select is-fullwidth">
+                    <select name="status">
+                        <option value="@DenunciasWebApp.Models.ComplaintStatus.Active"
+                                selected="@(Model.Status == DenunciasWebApp.Models.ComplaintStatus.Active)">
+                            Activa
+                        </option>
+                        <option value="@DenunciasWebApp.Models.ComplaintStatus.Processing"
+                                selected="@(Model.Status == DenunciasWebApp.Models.ComplaintStatus.Processing)">
+                            En Proceso
+                        </option>
+                        <option value="@DenunciasWebApp.Models.ComplaintStatus.Done"
+                                selected="@(Model.Status == DenunciasWebApp.Models.ComplaintStatus.Done)">
+                            Finalizada
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-grouped">
+            <div class="control">
+                <button type="submit" class="button is-primary">Guardar Cambios</button>
+            </div>
+            <div class="control">
+                <a asp-action="Index" class="button is-light">Cancelar</a>
+            </div>
+        </div>
+    </form>
+</div>
