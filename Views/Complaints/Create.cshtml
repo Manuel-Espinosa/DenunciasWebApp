@@ -11,6 +11,18 @@
         <div asp-validation-summary="ModelOnly" class="notification is-danger"></div>
 
         <div class="field">
+            <label asp-for="CrimeId" class="label">Tipo de Crimen</label>
+            <div class="control">
+                <div class="select is-fullwidth">
+                    <select asp-for="CrimeId" asp-items="@ViewBag.Crimes">
+                        <option value="">-- Seleccionar --</option>
+                    </select>
+                </div>
+            </div>
+            <span asp-validation-for="CrimeId" class="help is-danger"></span>
+        </div>
+
+        <div class="field">
             <label asp-for="Title" class="label">Titulo</label>
             <div class="control">
                 <input asp-for="Title" class="input" placeholder="Titulo de la denuncia" />

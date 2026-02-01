@@ -23,7 +23,7 @@ else
             <thead>
                 <tr>
                     <th>Titulo</th>
-                    <th>Descripcion</th>
+                    <th>Tipo de Crimen</th>
                     <th>Fecha</th>
                     <th>Estado</th>
                     <th>Acciones</th>
@@ -33,21 +33,21 @@ else
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => item.Title)</td>
-                    <td>@(item.Description.Length > 50 ? item.Description.Substring(0, 50) + "..." : item.Description)</td>
-                    <td>@item.CreatetAt.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@item.Title</td>
+                    <td>@item.Crime?.Name</td>
+                    <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>
-                        @switch (item.Status)
+                        @if (item.Status?.Name == "Activa")
                         {
-                            case DenunciasWebApp.Models.ComplaintStatus.Active:
-                                <span class="tag is-success">Activa</span>
-                                break;
-                            case DenunciasWebApp.Models.ComplaintStatus.Processing:
-                                <span class="tag is-warning">En Proceso</span>
-                                break;
-                            case DenunciasWebApp.Models.ComplaintStatus.Done:
-                                <span class="tag is-info">Finalizada</span>
-                                break;
+                            <span class="tag is-success">@item.Status.Name</span>
+                        }
+                        else if (item.Status?.Name == "En Proceso")
+                        {
+                            <span class="tag is-warning">@item.Status.Name</span>
+                        }
+                        else
+                        {
+                            <span class="tag is-info">@item.Status?.Name</span>
                         }
                     </td>
                     <td>

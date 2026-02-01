@@ -26,7 +26,9 @@ namespace DenunciasWebApp.Controllers
         {
             var complaints = _context.Complaints
                 .Include(c => c.User)
-                .OrderByDescending(c => c.CreatetAt);
+                .Include(c => c.Status)
+                .Include(c => c.Crime)
+                .OrderByDescending(c => c.CreatedAt);
             return View(await complaints.ToListAsync());
         }
 
@@ -40,6 +42,8 @@ namespace DenunciasWebApp.Controllers
 
             var complaint = await _context.Complaints
                 .Include(c => c.User)
+                .Include(c => c.Status)
+                .Include(c => c.Crime)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (complaint == null)
@@ -47,13 +51,14 @@ namespace DenunciasWebApp.Controllers
                 return NotFound();
             }
 
+            ViewBag.Statuses = new SelectList(_context.ComplaintStatuses, "Id", "Name", complaint.StatusId);
             return View(complaint);
         }
 
         // POST: Admin/ChangeStatus/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangeStatus(int id, ComplaintStatus status)
+        public async Task<IActionResult> ChangeStatus(int id, int statusId)
         {
             var complaint = await _context.Complaints.FindAsync(id);
 
@@ -62,7 +67,7 @@ namespace DenunciasWebApp.Controllers
                 return NotFound();
             }
 
-            complaint.Status = status;
+            complaint.StatusId = statusId;
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));

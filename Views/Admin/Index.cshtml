@@ -20,6 +20,7 @@ else
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Tipo</th>
                     <th>Titulo</th>
                     <th>Usuario</th>
                     <th>Fecha</th>
@@ -32,21 +33,22 @@ else
             {
                 <tr>
                     <td>@item.Id</td>
+                    <td>@item.Crime?.Name</td>
                     <td>@item.Title</td>
                     <td>@(item.User?.Email ?? "N/A")</td>
-                    <td>@item.CreatetAt.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>
-                        @switch (item.Status)
+                        @if (item.Status?.Name == "Activa")
                         {
-                            case DenunciasWebApp.Models.ComplaintStatus.Active:
-                                <span class="tag is-success">Activa</span>
-                                break;
-                            case DenunciasWebApp.Models.ComplaintStatus.Processing:
-                                <span class="tag is-warning">En Proceso</span>
-                                break;
-                            case DenunciasWebApp.Models.ComplaintStatus.Done:
-                                <span class="tag is-info">Finalizada</span>
-                                break;
+                            <span class="tag is-success">@item.Status.Name</span>
+                        }
+                        else if (item.Status?.Name == "En Proceso")
+                        {
+                            <span class="tag is-warning">@item.Status.Name</span>
+                        }
+                        else
+                        {
+                            <span class="tag is-info">@item.Status?.Name</span>
                         }
                     </td>
                     <td>

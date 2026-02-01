@@ -13,6 +13,8 @@ namespace DenunciasWebApp.Data
         {
         }
 
-        public DbSet<Complaint> Complaints {get; set;}
+        public DbSet<Complaint> Complaints { get; set; }
+        public DbSet<ComplaintStatus> ComplaintStatuses { get; set; }
+        public DbSet<Crime> Crimes { get; set; }
     }
 }

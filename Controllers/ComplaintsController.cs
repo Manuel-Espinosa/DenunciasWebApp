@@ -29,8 +29,10 @@ namespace DenunciasWebApp.Controllers
         {
             var userId = _userManager.GetUserId(User);
             var complaints = _context.Complaints
+                .Include(c => c.Status)
+                .Include(c => c.Crime)
                 .Where(c => c.UserId == userId)
-                .OrderByDescending(c => c.CreatetAt);
+                .OrderByDescending(c => c.CreatedAt);
             return View(await complaints.ToListAsync());
         }
 
@@ -44,6 +46,8 @@ namespace DenunciasWebApp.Controllers
 
             var userId = _userManager.GetUserId(User);
             var complaint = await _context.Complaints
+                .Include(c => c.Status)
+                .Include(c => c.Crime)
                 .FirstOrDefaultAsync(m => m.Id == id && m.UserId == userId);
 
             if (complaint == null)
@@ -57,18 +61,22 @@ namespace DenunciasWebApp.Controllers
         // GET: Complaints/Create
         public IActionResult Create()
         {
+            ViewBag.Crimes = new SelectList(_context.Crimes, "Id", "Name");
             return View();
         }
 
         // POST: Complaints/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Description")] Complaint complaint)
+        public async Task<IActionResult> Create([Bind("Title,Description,CrimeId")] Complaint complaint)
         {
             var userId = _userManager.GetUserId(User);
             complaint.UserId = userId!;
-            complaint.CreatetAt = DateTime.UtcNow;
-            complaint.Status = ComplaintStatus.Active;
+            complaint.CreatedAt = DateTime.UtcNow;
+
+            // Set initial status to "Activa" (Id = 1)
+            var activeStatus = await _context.ComplaintStatuses.FirstOrDefaultAsync(s => s.Name == "Activa");
+            complaint.StatusId = activeStatus?.Id ?? 1;
 
             ModelState.Remove("UserId");
 
@@ -78,6 +86,8 @@ namespace DenunciasWebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.Crimes = new SelectList(_context.Crimes, "Id", "Name", complaint.CrimeId);
             return View(complaint);
         }
 
@@ -97,13 +107,15 @@ namespace DenunciasWebApp.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.Crimes = new SelectList(_context.Crimes, "Id", "Name", complaint.CrimeId);
             return View(complaint);
         }
 
         // POST: Complaints/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description")] Complaint complaint)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,CrimeId")] Complaint complaint)
         {
             if (id != complaint.Id)
             {
@@ -121,6 +133,7 @@ namespace DenunciasWebApp.Controllers
 
             existingComplaint.Title = complaint.Title;
             existingComplaint.Description = complaint.Description;
+            existingComplaint.CrimeId = complaint.CrimeId;
 
             ModelState.Remove("UserId");
 
@@ -143,6 +156,8 @@ namespace DenunciasWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.Crimes = new SelectList(_context.Crimes, "Id", "Name", complaint.CrimeId);
             return View(complaint);
         }
 
@@ -156,6 +171,8 @@ namespace DenunciasWebApp.Controllers
 
             var userId = _userManager.GetUserId(User);
             var complaint = await _context.Complaints
+                .Include(c => c.Status)
+                .Include(c => c.Crime)
                 .FirstOrDefaultAsync(m => m.Id == id && m.UserId == userId);
 
             if (complaint == null)

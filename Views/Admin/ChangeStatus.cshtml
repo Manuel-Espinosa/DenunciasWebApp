@@ -11,23 +11,24 @@
 
     <div class="content">
         <p><strong>ID:</strong> @Model.Id</p>
+        <p><strong>Tipo de Crimen:</strong> @Model.Crime?.Name</p>
         <p><strong>Titulo:</strong> @Model.Title</p>
         <p><strong>Descripcion:</strong> @Model.Description</p>
         <p><strong>Usuario:</strong> @(Model.User?.Email ?? "N/A")</p>
-        <p><strong>Fecha:</strong> @Model.CreatetAt.ToString("dd/MM/yyyy HH:mm")</p>
+        <p><strong>Fecha:</strong> @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</p>
         <p>
             <strong>Estado actual:</strong>
-            @switch (Model.Status)
+            @if (Model.Status?.Name == "Activa")
             {
-                case DenunciasWebApp.Models.ComplaintStatus.Active:
-                    <span class="tag is-success">Activa</span>
-                    break;
-                case DenunciasWebApp.Models.ComplaintStatus.Processing:
-                    <span class="tag is-warning">En Proceso</span>
-                    break;
-                case DenunciasWebApp.Models.ComplaintStatus.Done:
-                    <span class="tag is-info">Finalizada</span>
-                    break;
+                <span class="tag is-success">@Model.Status.Name</span>
+            }
+            else if (Model.Status?.Name == "En Proceso")
+            {
+                <span class="tag is-warning">@Model.Status.Name</span>
+            }
+            else
+            {
+                <span class="tag is-info">@Model.Status?.Name</span>
             }
         </p>
     </div>
@@ -41,20 +42,7 @@
             <label class="label">Nuevo Estado</label>
             <div class="control">
                 <div class="select is-fullwidth">
-                    <select name="status">
-                        <option value="@DenunciasWebApp.Models.ComplaintStatus.Active"
-                                selected="@(Model.Status == DenunciasWebApp.Models.ComplaintStatus.Active)">
-                            Activa
-                        </option>
-                        <option value="@DenunciasWebApp.Models.ComplaintStatus.Processing"
-                                selected="@(Model.Status == DenunciasWebApp.Models.ComplaintStatus.Processing)">
-                            En Proceso
-                        </option>
-                        <option value="@DenunciasWebApp.Models.ComplaintStatus.Done"
-                                selected="@(Model.Status == DenunciasWebApp.Models.ComplaintStatus.Done)">
-                            Finalizada
-                        </option>
-                    </select>
+                    <select name="statusId" asp-items="@ViewBag.Statuses"></select>
                 </div>
             </div>
         </div>

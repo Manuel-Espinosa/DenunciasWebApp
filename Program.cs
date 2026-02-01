@@ -56,6 +56,35 @@ using (var scope = app.Services.CreateScope())
         await userManager.CreateAsync(admin, "Admin123!");
         await userManager.AddToRoleAsync(admin, "Administrador");
     }
+
+    // Seed ComplaintStatuses
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    if (!context.ComplaintStatuses.Any())
+    {
+        context.ComplaintStatuses.AddRange(
+            new ComplaintStatus { Name = "Activa" },
+            new ComplaintStatus { Name = "En Proceso" },
+            new ComplaintStatus { Name = "Finalizada" }
+        );
+        await context.SaveChangesAsync();
+    }
+
+    // Seed Crimes
+    if (!context.Crimes.Any())
+    {
+        context.Crimes.AddRange(
+            new Crime { Name = "Robo" },
+            new Crime { Name = "Asalto" },
+            new Crime { Name = "Acoso" },
+            new Crime { Name = "Vandalismo" },
+            new Crime { Name = "Fraude" },
+            new Crime { Name = "Extorsion" },
+            new Crime { Name = "Violencia domestica" },
+            new Crime { Name = "Otro" }
+        );
+        await context.SaveChangesAsync();
+    }
 }
 
 // Configure the HTTP request pipeline.
